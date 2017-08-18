@@ -21,8 +21,13 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #ifndef DateToolsLocalizedStrings
-#define DateToolsLocalizedStrings(key) \
-NSLocalizedStringFromTableInBundle(key, @"DateTools", [NSBundle bundleWithPath:[[[NSBundle bundleForClass:[DTError class]] resourcePath] stringByAppendingPathComponent:@"DateTools.bundle"]], nil)
+#define DateToolsLocalizedStrings(key) ^NSString *{ \
+    NSString *language = [[[NSUserDefaults standardUserDefaults] objectForKey:@"AppleLanguages"] firstObject]; \
+    NSBundle *bundle = [NSBundle bundleWithPath:[[[NSBundle bundleForClass:[DTError class]] resourcePath] stringByAppendingPathComponent:@"DateTools.bundle"]]; \
+    bundle = [NSBundle bundleWithPath:[bundle pathForResource:language ofType:@"lproj"]]; \
+    NSString *result = [bundle localizedStringForKey:(key) value:@"" table:@"DateTools"]; \
+    return result; \
+}()
 #endif
 
 #import <Foundation/Foundation.h>
